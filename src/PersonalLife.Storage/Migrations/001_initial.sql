@@ -1,0 +1,13 @@
+CREATE TABLE IF NOT EXISTS schema_meta(version INTEGER NOT NULL);
+INSERT INTO schema_meta SELECT 1 WHERE NOT EXISTS(SELECT 1 FROM schema_meta);
+CREATE TABLE IF NOT EXISTS daily_tasks(id TEXT PRIMARY KEY, body TEXT NOT NULL CHECK(json_valid(body)), date TEXT GENERATED ALWAYS AS(json_extract(body,'$.Date')) STORED, CHECK(length(trim(json_extract(body,'$.Title')))>0));
+CREATE TABLE IF NOT EXISTS workouts(id TEXT PRIMARY KEY, body TEXT NOT NULL CHECK(json_valid(body)), date TEXT GENERATED ALWAYS AS(json_extract(body,'$.Date')) STORED UNIQUE);
+CREATE TABLE IF NOT EXISTS exercises(id TEXT PRIMARY KEY, body TEXT NOT NULL CHECK(json_valid(body)), parent TEXT GENERATED ALWAYS AS(json_extract(body,'$.WorkoutId')) STORED REFERENCES workouts(id) ON DELETE CASCADE);
+CREATE TABLE IF NOT EXISTS exercise_sets(id TEXT PRIMARY KEY, body TEXT NOT NULL CHECK(json_valid(body)), parent TEXT GENERATED ALWAYS AS(json_extract(body,'$.ExerciseId')) STORED REFERENCES exercises(id) ON DELETE CASCADE, num INTEGER GENERATED ALWAYS AS(json_extract(body,'$.SetNumber')) STORED, UNIQUE(parent,num), CHECK(num>0), CHECK(json_extract(body,'$.ActualReps')>=0));
+CREATE TABLE IF NOT EXISTS meals(id TEXT PRIMARY KEY, body TEXT NOT NULL CHECK(json_valid(body)), date TEXT GENERATED ALWAYS AS(json_extract(body,'$.Date')) STORED, slot TEXT GENERATED ALWAYS AS(json_extract(body,'$.Slot')) STORED, UNIQUE(date,slot));
+CREATE TABLE IF NOT EXISTS water_entries(id TEXT PRIMARY KEY, body TEXT NOT NULL CHECK(json_valid(body)), CHECK(json_extract(body,'$.Milliliters')>0));
+CREATE TABLE IF NOT EXISTS game_plans(id TEXT PRIMARY KEY, body TEXT NOT NULL CHECK(json_valid(body)), CHECK(json_extract(body,'$.PlannedMinutes')>0));
+CREATE TABLE IF NOT EXISTS game_sessions(id TEXT PRIMARY KEY, body TEXT NOT NULL CHECK(json_valid(body)), CHECK(json_extract(body,'$.DurationMinutes')>0));
+CREATE TABLE IF NOT EXISTS journals(id TEXT PRIMARY KEY, body TEXT NOT NULL CHECK(json_valid(body)), date TEXT GENERATED ALWAYS AS(json_extract(body,'$.Date')) STORED UNIQUE);
+CREATE TABLE IF NOT EXISTS settings(id TEXT PRIMARY KEY CHECK(id='settings'),body TEXT NOT NULL CHECK(json_valid(body)));
+INSERT OR IGNORE INTO settings VALUES('settings','{"WeekStartsOn":"monday"}');

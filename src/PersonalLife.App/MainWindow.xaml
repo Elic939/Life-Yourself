@@ -1,0 +1,18 @@
+<Window x:Class="PersonalLife.App.MainWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Title="我的生活" Width="1200" Height="820" MinWidth="900" MinHeight="650" Background="#F4F6F2" FontFamily="Microsoft YaHei UI" FontSize="14" Foreground="#253B30">
+<Window.Resources>
+<Style TargetType="Button"><Setter Property="Padding" Value="14,9"/><Setter Property="Margin" Value="0,4,8,4"/><Setter Property="Background" Value="#E6EDE3"/><Setter Property="BorderBrush" Value="#CFD9CD"/><Setter Property="Cursor" Value="Hand"/></Style>
+<Style TargetType="TextBox"><Setter Property="Padding" Value="8"/><Setter Property="Margin" Value="0,4,0,10"/><Setter Property="BorderBrush" Value="#CBD5C8"/></Style>
+<Style TargetType="ComboBox"><Setter Property="Padding" Value="8"/><Setter Property="Margin" Value="0,4,0,10"/></Style>
+</Window.Resources>
+<Grid><Grid.ColumnDefinitions><ColumnDefinition Width="180"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+<Border Background="#FFFFFF" BorderBrush="#DCE4D9" BorderThickness="0,0,1,0"><DockPanel Margin="14,26">
+<StackPanel DockPanel.Dock="Top"><TextBlock Text="我的生活" FontSize="25" FontWeight="SemiBold" Margin="8,0,0,8"/><TextBlock Text="每天，都有自己的节奏" FontSize="11" Foreground="#71816F" Margin="8,0,0,28"/></StackPanel>
+<TextBlock DockPanel.Dock="Bottom" Text="本机保存 · 离线使用" FontSize="12" Foreground="#71816F" Margin="8"/>
+<StackPanel x:Name="Navigation"/></DockPanel></Border>
+<Grid Grid.Column="1" Margin="24"><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+<DockPanel Margin="0,0,0,20"><StackPanel x:Name="DatePanel" DockPanel.Dock="Right" Orientation="Horizontal"><Button Content="‹" Click="PreviousDay"/><DatePicker x:Name="DateInput" Width="150" VerticalAlignment="Center" SelectedDateChanged="DateChanged"/><Button Content="›" Click="NextDay"/><Button Content="今天" Click="Today"/></StackPanel><TextBlock x:Name="PageTitle" FontSize="27" VerticalAlignment="Center"/></DockPanel>
+<ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto"><StackPanel x:Name="PageContent"/></ScrollViewer>
+<DockPanel Grid.Row="2"><TextBlock x:Name="SaveLabel" Text="已保存" Margin="0,12,0,0" Foreground="#71816F"/><Button x:Name="RetryButton" Content="重试保存" Visibility="Collapsed"/><Button x:Name="UndoButton" Content="撤销删除" Visibility="Collapsed"/></DockPanel>
+</Grid>
+<Border x:Name="Drawer" Grid.Column="1" Width="380" HorizontalAlignment="Right" Background="White" BorderBrush="#CBD5C8" BorderThickness="1,0,0,0" Visibility="Collapsed"><ScrollViewer VerticalScrollBarVisibility="Auto"><StackPanel x:Name="DrawerContent" Margin="20"/></ScrollViewer></Border>
+</Grid></Window>
