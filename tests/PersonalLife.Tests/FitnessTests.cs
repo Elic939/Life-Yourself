@@ -1,0 +1,9 @@
+using PersonalLife.Core;
+namespace PersonalLife.Tests;
+[TestClass]public class FitnessTests
+{
+ [TestMethod]public void ActualSetsDoNotOverwritePlan(){using var t=new TestStore();var s=new FitnessService(t.Store);var w=new Workout{Date=new(2026,9,13),Title="上肢"};s.Save(w);var e=new Exercise{WorkoutId=w.Id,Name="卧推",PlannedSets=3,PlannedReps=10,PlannedWeightKg=10};s.Save(e);s.Save(new ExerciseSet{ExerciseId=e.Id,SetNumber=1,ActualReps=10,ActualWeightKg=10});s.Save(new ExerciseSet{ExerciseId=e.Id,SetNumber=2,ActualReps=8,ActualWeightKg=12});Assert.AreEqual(e,t.Store.ReadAll().Exercises.Single());CollectionAssert.AreEqual(new[]{10,8},t.Store.ReadAll().ExerciseSets.Select(x=>x.ActualReps).ToArray());}
+ [TestMethod]public void DurationNeedsNoWeight(){using var t=new TestStore();var s=new FitnessService(t.Store);var w=new Workout{Title="快走"};s.Save(w);s.Save(new Exercise{WorkoutId=w.Id,Name="快走",Kind="duration",PlannedMinutes=30,ActualMinutes=25});Assert.AreEqual(25,t.Store.ReadAll().Exercises.Single().ActualMinutes);}
+ [TestMethod]public void UndoRestoresChildren(){using var t=new TestStore();var s=new FitnessService(t.Store);var w=new Workout{Title="训练"};s.Save(w);var e=new Exercise{WorkoutId=w.Id,Name="深蹲",PlannedSets=3,PlannedReps=10};s.Save(e);s.Save(new ExerciseSet{ExerciseId=e.Id,SetNumber=1,ActualReps=10});var u=new UndoService(t.Store);u.Delete<Workout>(w.Id);Assert.IsEmpty(t.Store.ReadAll().ExerciseSets);u.Undo();Assert.HasCount(1,t.Store.ReadAll().ExerciseSets);Assert.AreEqual(e,t.Store.ReadAll().Exercises.Single());}
+ [TestMethod]public void NegativeAndRestDayConflictRejected(){using var t=new TestStore();var s=new FitnessService(t.Store);var w=new Workout{Title="训练"};s.Save(w);var e=new Exercise{WorkoutId=w.Id,Name="深蹲",PlannedSets=3,PlannedReps=10};s.Save(e);Assert.Throws<ArgumentException>(()=>s.Save(e with{PlannedWeightKg=-1}));Assert.Throws<ArgumentException>(()=>s.Save(w with{IsRestDay=true}));}
+}

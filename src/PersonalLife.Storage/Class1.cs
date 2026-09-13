@@ -1,4 +1,4 @@
-﻿namespace PersonalLife.Storage;
+namespace PersonalLife.Storage;
 
 public class Class1
 {

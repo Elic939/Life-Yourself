@@ -11,7 +11,8 @@ public sealed class SaveCoordinator
  public void Queue(string key,Func<WriteReceipt> write){long ticket;lock(gate){pending[key]=(++version,write);invalid.Remove(key);State=SaveState.Saving;Error=null;ticket=++timer;}Changed?.Invoke();_ = Debounce(ticket);}
  async Task Debounce(long ticket){await Task.Delay(500);lock(gate){if(ticket!=timer)return;}await FlushAsync();}
  public void SetInvalid(string key,string message){lock(gate){pending.Remove(key);invalid[key]=message;State=SaveState.Invalid;Error=message;++timer;}Changed?.Invoke();}
- public void Discard(){lock(gate){pending.Clear();invalid.Clear();State=SaveState.Saved;Error=null;++timer;}Changed?.Invoke();}
+ public void Discard(){if(writer.CurrentCount==0)throw new InvalidOperationException("请等待正在保存的写入完成");lock(gate){pending.Clear();invalid.Clear();State=SaveState.Saved;Error=null;++timer;}Changed?.Invoke();}
+ public async Task DiscardAsync(){lock(gate){pending.Clear();invalid.Clear();State=SaveState.Saving;++timer;}Changed?.Invoke();await writer.WaitAsync();try{lock(gate){State=invalid.Count>0?SaveState.Invalid:pending.Count>0?SaveState.Saving:SaveState.Saved;Error=invalid.Values.FirstOrDefault();}}finally{writer.Release();}Changed?.Invoke();}
  public async Task<bool> FlushAsync()
  {
    await writer.WaitAsync();

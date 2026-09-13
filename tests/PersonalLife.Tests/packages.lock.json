@@ -1,7 +1,7 @@
 {
   "version": 1,
   "dependencies": {
-    "net10.0": {
+    "net10.0-windows7.0": {
       "MSTest": {
         "type": "Direct",
         "requested": "[4.0.2, )",
@@ -195,6 +195,13 @@
         "contentHash": "W3oH4XIfCzFrgUSDKHhN6N+dgzA5YHOR2VxX8GB6Qy7CyrJJgxPEG8NirgYWlPQC5P2jz2knSsexWu4tDUL33g==",
         "dependencies": {
           "SQLitePCLRaw.core": "2.1.12"
+        }
+      },
+      "PersonalLife": {
+        "type": "Project",
+        "dependencies": {
+          "PersonalLife.Core": "[1.0.0, )",
+          "PersonalLife.Storage": "[1.0.0, )"
         }
       },
       "personallife.core": {

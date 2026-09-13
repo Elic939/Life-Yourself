@@ -1,8 +1,8 @@
-﻿<Application x:Class="PersonalLife.App.App"
+<Application x:Class="PersonalLife.App.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:PersonalLife.App"
-             StartupUri="MainWindow.xaml">
+             >
     <Application.Resources>
          
     </Application.Resources>

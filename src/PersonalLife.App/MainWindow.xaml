@@ -11,7 +11,7 @@
 <StackPanel x:Name="Navigation"/></DockPanel></Border>
 <Grid Grid.Column="1" Margin="24"><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
 <DockPanel Margin="0,0,0,20"><StackPanel x:Name="DatePanel" DockPanel.Dock="Right" Orientation="Horizontal"><Button Content="‹" Click="PreviousDay"/><DatePicker x:Name="DateInput" Width="150" VerticalAlignment="Center" SelectedDateChanged="DateChanged"/><Button Content="›" Click="NextDay"/><Button Content="今天" Click="Today"/></StackPanel><TextBlock x:Name="PageTitle" FontSize="27" VerticalAlignment="Center"/></DockPanel>
-<ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto"><StackPanel x:Name="PageContent"/></ScrollViewer>
+<ScrollViewer x:Name="ContentScroll" Grid.Row="1" VerticalScrollBarVisibility="Auto"><StackPanel x:Name="PageContent"/></ScrollViewer>
 <DockPanel Grid.Row="2"><TextBlock x:Name="SaveLabel" Text="已保存" Margin="0,12,0,0" Foreground="#71816F"/><Button x:Name="RetryButton" Content="重试保存" Visibility="Collapsed"/><Button x:Name="UndoButton" Content="撤销删除" Visibility="Collapsed"/></DockPanel>
 </Grid>
 <Border x:Name="Drawer" Grid.Column="1" Width="380" HorizontalAlignment="Right" Background="White" BorderBrush="#CBD5C8" BorderThickness="1,0,0,0" Visibility="Collapsed"><ScrollViewer VerticalScrollBarVisibility="Auto"><StackPanel x:Name="DrawerContent" Margin="20"/></ScrollViewer></Border>

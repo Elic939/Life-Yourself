@@ -19,4 +19,3 @@ public sealed class UndoService(IDataStore store,Func<DateTimeOffset>? clock=nul
  }
  public void Clear()=>deleted=null;
 }
-
